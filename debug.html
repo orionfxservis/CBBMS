@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Deep Debugger</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #111;
+            color: #0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Google Script Connection Tester</h2>
+    <button onclick="testConnection()">TEST ADD FLAT</button>
+    <div id="output">Waiting...</div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyNFswl0i86ccG7NNm3NC7--ae5_etQ65qUZMgbYqmxfLaIyJVWKd32tYhmXDU1fDxr/exec';
+
+        async function testConnection() {
+            const out = document.getElementById('output');
+            out.innerHTML = 'Sending request...';
+
+            try {
+                // Try to add a dummy flat with explicit params
+                const params = new URLSearchParams({
+                    action: 'addFlat',
+                    flatNo: 'DEBUG-999',
+                    type: 'Rented',
+                    tenantName: 'Debug User',
+                    rentAmount: '500',
+                    maintAmount: '100',
+                    mobileNo: '0000000000'
+                });
+
+                const res = await fetch(`${SCRIPT_URL}?${params.toString()}`);
+                const text = await res.text();
+
+                out.innerHTML = `<h3>STATUS: ${res.status}</h3><hr>`;
+                out.innerHTML += `<h3>RAW RESPONSE:</h3><pre>${text.replace(/</g, '&lt;')}</pre>`;
+
+            } catch (e) {
+                out.innerHTML = `CRITICAL ERROR: ${e.message}`;
+            }
+        }
+    </script>
+</body>
+
+</html>

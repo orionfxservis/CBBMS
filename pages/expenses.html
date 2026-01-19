@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prime Residency | Expenses</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <a href="../index.html" style="text-decoration:none; color:inherit; display:flex; align-items:center;">
+                <i class="ri-building-2-line"></i> Prime Res.
+            </a>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="../dashboard.html"><i class="ri-dashboard-line"></i> Dashboard</a>
+            </li>
+            <li>
+                <a href="payments.html"><i class="ri-money-dollar-circle-line"></i> Payments</a>
+            </li>
+            <li>
+                <a href="tenants.html"><i class="ri-user-star-line"></i> Tenants</a>
+            </li>
+            <li>
+                <a href="#" class="active"><i class="ri-file-list-3-line"></i> Expenses</a>
+            </li>
+            <li>
+                <a href="reports.html"><i class="ri-file-chart-line"></i> Reports</a>
+            </li>
+            <li>
+                <a href="settings.html"><i class="ri-settings-4-line"></i> Settings</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <header>
+            <div style="display:flex; align-items:center;">
+                <span class="menu-toggle" id="menuToggle">
+                    <i class="ri-menu-line"></i>
+                </span>
+                <h2>Expenses</h2>
+            </div>
+            <div class="user-wrapper">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=random" alt="Admin">
+                <div>
+                    <h4>Admin User</h4>
+                    <small>Super Admin</small>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+
+            <!-- ACTIONS BAR -->
+            <div class="actions-bar">
+                <div class="search-wrapper">
+                    <i class="ri-search-line"></i>
+                    <input type="search" id="searchInput" placeholder="Search Expense, Name...">
+                </div>
+                <button class="btn-primary" onclick="openModal()">
+                    <i class="ri-add-line"></i> Add New Expense
+                </button>
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Payee Name</th>
+                            <th>Expense Head</th>
+                            <th>Amount</th>
+                            <th>Payment Mode</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expensesTable">
+                        <!-- Data will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL FOR ADD EXPENSE -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Expense</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="eDate" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Payee Name</label>
+                <input type="text" id="eName" placeholder="To whom paid">
+            </div>
+
+            <div class="form-group">
+                <label>Expense Head</label>
+                <select id="eHead">
+                    <option value="" disabled selected>Select Category</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Lift Maintenance">Lift Maintenance</option>
+                    <option value="Generator fuel">Generator fuel</option>
+                    <option value="Generator Maintenance">Generator Maintenance</option>
+                    <option value="Electricity Bill">Electricity Bill</option>
+                    <option value="Water Bill">Water Bill</option>
+                    <option value="Gas Bill">Gas Bill</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Amount Paid</label>
+                <input type="number" id="eAmount" placeholder="0">
+            </div>
+
+            <div class="form-group">
+                <label>Payment Mode</label>
+                <select id="eMode">
+                    <option value="Cash">Cash</option>
+                    <option value="Online">Online</option>
+                </select>
+            </div>
+
+            <button class="btn-primary" style="width:100%; justify-content:center;" onclick="addExpense()">Save
+                Expense</button>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- LOADER -->
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script src="../js/dashboard.js"></script>
+    <script>
+        window.currentPage = 'expenses';
+        // Auto-fill Today's Date
+        document.getElementById('eDate').valueAsDate = new Date();
+    </script>
+
+</body>
+
+</html>

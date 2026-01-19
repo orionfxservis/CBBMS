@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prime Residency | Building Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Landing Page Specific Overrides */
+        body {
+            display: block;
+            /* Override flex from dashboard layout */
+            overflow-y: auto;
+            /* Allow scrolling */
+            height: auto;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-align: center;
+        }
+
+        .hero-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            /* Overlay for text readability */
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .btn-cta {
+            padding: 1rem 2.5rem;
+            background: var(--primary-color);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-cta:hover {
+            background: #2e59d9;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* About & Services */
+        .details-section {
+            padding: 5rem 2rem;
+            background: var(--white);
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-box {
+            padding: 2rem;
+            border-radius: 10px;
+            background: var(--light-bg);
+            box-shadow: var(--shadow-sm);
+            transition: 0.3s;
+        }
+
+        .service-box:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .service-box i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .service-box h3 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        /* Building Selector */
+        .buildings-section {
+            padding: 5rem 2rem;
+            background: var(--light-bg);
+            text-align: center;
+        }
+
+        .buildings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .building-box {
+            position: relative;
+            height: 250px;
+            /* Square-ish */
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+
+        .building-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .building-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.5s;
+        }
+
+        .building-box:hover img {
+            transform: scale(1.1);
+        }
+
+        .building-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            color: #fff;
+            text-align: left;
+        }
+
+        .building-info h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .building-info p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-color);
+            color: #fff;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .buildings-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .buildings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO SECTION -->
+    <div class="hero-section">
+        <div class="hero-slider" id="heroSlider">
+            <!-- Images will be injected/styled here -->
+            <div class="slide active"
+                style="background-image: url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=1920&auto=format&fit=crop');">
+            </div>
+            <div class="slide"
+                style="background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1920&auto=format&fit=crop');">
+            </div>
+            <div class="slide"
+                style="background-image: url('https://images.unsplash.com/photo-1460317442991-0ec2aa2498a2?q=80&w=1920&auto=format&fit=crop');">
+            </div>
+            <div class="slide"
+                style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1920&auto=format&fit=crop');">
+            </div>
+            <div class="slide"
+                style="background-image: url('https://images.unsplash.com/photo-1554469384-e58fac16e23a?q=80&w=1920&auto=format&fit=crop');">
+            </div>
+        </div>
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <h1>Excellence in Building Management</h1>
+            <p>Providing world-class facilities and seamless management services for resident satisfaction and
+                operational efficiency.</p>
+            <a href="#buildings" class="btn-cta">Select Your Building</a>
+        </div>
+    </div>
+
+    <!-- SERVICES SECTION -->
+    <div class="details-section">
+        <h2 class="section-title">Our Premium Services</h2>
+        <div class="services-grid">
+            <div class="service-box">
+                <i class="ri-customer-service-2-line"></i>
+                <h3>24/7 Support</h3>
+                <p>Round-the-clock assistance for all resident needs and emergency maintenance.</p>
+            </div>
+            <div class="service-box">
+                <i class="ri-secure-payment-line"></i>
+                <h3>Secure Payments</h3>
+                <p>Hassle-free digital rent and maintenance collection with instant receipts.</p>
+            </div>
+            <div class="service-box">
+                <i class="ri-community-line"></i>
+                <h3>Community Living</h3>
+                <p>Organized events and well-maintained shared spaces for a vibrant community.</p>
+            </div>
+            <div class="service-box">
+                <i class="ri-shield-star-line"></i>
+                <h3>Top Security</h3>
+                <p>Advanced surveillance and guarded entry for complete peace of mind.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BUILDINGS SECTION -->
+    <div class="buildings-section" id="buildings">
+        <h2 class="section-title">Select Your Residency</h2>
+        <div class="buildings-grid">
+            <!-- Building 1 (Connected) -->
+            <a href="dashboard.html" class="building-box">
+                <img src="images/buildings/01.jpg" alt="Prime Residency">
+                <div class="building-info">
+                    <h4>Prime Residency</h4>
+                    <p>Downtown, City Center</p>
+                </div>
+            </a>
+
+            <!-- Building 2 -->
+            <a href="#" class="building-box">
+                <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?q=80&w=500&auto=format&fit=crop"
+                    alt="Skyline Heights">
+                <div class="building-info">
+                    <h4>Skyline Heights</h4>
+                    <p>West Bay Area</p>
+                </div>
+            </a>
+
+            <!-- Building 3 -->
+            <a href="#" class="building-box">
+                <img src="https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?q=80&w=500&auto=format&fit=crop"
+                    alt="Oasis Gardens">
+                <div class="building-info">
+                    <h4>Oasis Gardens</h4>
+                    <p>Green Valley</p>
+                </div>
+            </a>
+
+            <!-- Building 4 -->
+            <a href="#" class="building-box">
+                <img src="https://images.unsplash.com/photo-1555636222-cae831e670b3?q=80&w=500&auto=format&fit=crop"
+                    alt="Urban Lofts">
+                <div class="building-info">
+                    <h4>Urban Lofts</h4>
+                    <p>Creative District</p>
+                </div>
+            </a>
+
+            <!-- Building 5 -->
+            <a href="#" class="building-box">
+                <img src="https://images.unsplash.com/photo-1574362848149-11496d93a7c7?q=80&w=500&auto=format&fit=crop"
+                    alt="The Pinnacle">
+                <div class="building-info">
+                    <h4>The Pinnacle</h4>
+                    <p>Financial Hub</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Building Management System. All rights reserved.</p>
+    </footer>
+
+    <!-- SCRIPT FOR SLIDER -->
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        const slideInterval = 5000; // 5 seconds
+
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        setInterval(nextSlide, slideInterval);
+    </script>
+</body>
+
+</html>

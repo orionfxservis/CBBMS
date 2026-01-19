@@ -1,0 +1,131 @@
+/* =========================================
+   6. DASHBOARD ENHANCEMENTS
+   ========================================= */
+
+/* Quick Actions */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.btn-quick {
+    background: white;
+    border: none;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: var(--dark-color);
+    font-weight: 500;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-quick i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.btn-quick:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, white 0%, #f8f9fc 100%);
+}
+
+.btn-quick::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary-color);
+}
+
+.btn-quick:nth-child(2)::after {
+    background: var(--success-color);
+}
+
+.btn-quick:nth-child(2) i {
+    color: var(--success-color);
+}
+
+.btn-quick:nth-child(3)::after {
+    background: var(--danger-color);
+}
+
+.btn-quick:nth-child(3) i {
+    color: var(--danger-color);
+}
+
+.btn-quick:nth-child(4)::after {
+    background: var(--warning-color);
+}
+
+.btn-quick:nth-child(4) i {
+    color: var(--warning-color);
+}
+
+/* Charts Grid */
+.charts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    /* Income Chart bigger than Occupancy */
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.chart-container {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    height: 400px;
+}
+
+.chart-container h3 {
+    font-size: 1rem;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e3e6f0;
+    padding-bottom: 0.5rem;
+}
+
+/* Dark Mode Support for New Elements */
+body.dark-mode .btn-quick {
+    background: var(--white);
+    /* Uses dark mode white variable */
+    color: var(--dark-color);
+}
+
+body.dark-mode .btn-quick:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .chart-container {
+    background: var(--white);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 900px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
