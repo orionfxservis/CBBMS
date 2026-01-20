@@ -32,6 +32,30 @@
             text-align: center;
         }
 
+        .admin-login-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: 0.3s;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-login-btn:hover {
+            background: #fff;
+            color: var(--primary-color);
+        }
+
         .hero-slider {
             position: absolute;
             top: 0;
@@ -295,6 +319,10 @@
         </div>
         <div class="hero-overlay"></div>
 
+        <a href="#" onclick="handleSuperAdminLogin(); return false;" class="admin-login-btn">
+            <i class="ri-admin-line"></i> Admin Login
+        </a>
+
         <div class="hero-content">
             <h1>Excellence in Building Management</h1>
             <p>Providing world-class facilities and seamless management services for resident satisfaction and
@@ -330,12 +358,55 @@
         </div>
     </div>
 
+    <!-- FEATURES & BENEFITS SECTION -->
+    <div class="details-section" style="background: #f8f9fc;">
+        <h2 class="section-title">Key Features & Benefits</h2>
+        <div class="services-grid">
+            <!-- Feature 1 -->
+            <div class="service-box" style="background: white;">
+                <i class="ri-building-line"></i>
+                <h3>Centralized Flat Management</h3>
+                <p><strong>Feature:</strong> Maintain complete records of all flats, owners, and tenants in one
+                    cloud-based system.</p>
+                <p style="margin-top:0.5rem; color:var(--primary-color);"><strong>Benefit:</strong> No more manual
+                    registers. Instantly view flat status and occupancy, saving time.</p>
+            </div>
+            <!-- Feature 2 -->
+            <div class="service-box" style="background: white;">
+                <i class="ri-hand-coin-line"></i>
+                <h3>Rent & Maintenance Tracking</h3>
+                <p><strong>Feature:</strong> Track monthly rent and maintenance payments with clear Paid / Unpaid
+                    status.</p>
+                <p style="margin-top:0.5rem; color:var(--primary-color);"><strong>Benefit:</strong> Improves cash flow
+                    control and avoids missed payments.</p>
+            </div>
+            <!-- Feature 3 -->
+            <div class="service-box" style="background: white;">
+                <i class="ri-dashboard-3-line"></i>
+                <h3>Real-Time Dashboard</h3>
+                <p><strong>Feature:</strong> Interactive dashboard showing total rental income and detailed reports.</p>
+                <p style="margin-top:0.5rem; color:var(--primary-color);"><strong>Benefit:</strong> Faster, better
+                    decisions with instant visibility of financial health.</p>
+            </div>
+            <!-- Feature 4 -->
+            <div class="service-box" style="background: white;">
+                <i class="ri-smartphone-line"></i>
+                <h3>Cloud & Mobile Friendly</h3>
+                <p><strong>Feature:</strong> Accessible from any device (mobile, tablet, desktop) with cloud storage.
+                </p>
+                <p style="margin-top:0.5rem; color:var(--primary-color);"><strong>Benefit:</strong> Admins can manage
+                    the building from anywhere, anytime.</p>
+            </div>
+        </div>
+    </div>
+
     <!-- BUILDINGS SECTION -->
     <div class="buildings-section" id="buildings">
         <h2 class="section-title">Select Your Residency</h2>
         <div class="buildings-grid">
             <!-- Building 1 (Connected) -->
-            <a href="dashboard.html" class="building-box">
+            <a href="dashboard.html" class="building-box"
+                onclick="sessionStorage.setItem('userRole', 'regular_admin');">
                 <img src="images/buildings/01.jpg" alt="Prime Residency">
                 <div class="building-info">
                     <h4>Prime Residency</h4>
@@ -388,6 +459,10 @@
     <!-- FOOTER -->
     <footer>
         <p>&copy; 2026 Building Management System. All rights reserved.</p>
+        <p style="margin-top: 10px; font-size: 0.8rem;">
+            <a href="#" onclick="handleSuperAdminLogin(); return false;"
+                style="color: rgba(255,255,255,0.5); text-decoration: none;">Super Admin</a>
+        </p>
     </footer>
 
     <!-- SCRIPT FOR SLIDER -->
@@ -403,6 +478,19 @@
         }
 
         setInterval(nextSlide, slideInterval);
+
+        function handleSuperAdminLogin() {
+            const pass = prompt("Enter Super Admin Password:");
+            if (pass === "PrimeSuper2026") {
+                sessionStorage.setItem('userRole', 'super_admin');
+                window.location.href = 'dashboard.html';
+            } else if (pass) {
+                alert("Invalid Password!");
+            }
+        }
+
+        // Clear role on load
+        sessionStorage.removeItem('userRole');
     </script>
 </body>
 

@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Apply Settings First
   applySettings();
 
+  // CHECK ROLE ACCESS
+  checkRoleAccess();
+
   if (window.currentPage !== 'settings') loadDashboard();
   if (window.currentPage === 'settings') loadSettingsUI();
 
@@ -875,9 +878,102 @@ function renderCharts(data) {
       responsive: true,
       maintainAspectRatio: false,
       cutout: '70%',
+      layout: {
+        padding: 20
+      },
       plugins: {
-        legend: { position: 'bottom' }
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 20
+          }
+        }
       }
     }
   });
+}
+
+function logout() {
+  if (confirm("Are you sure you want to logout?")) {
+    sessionStorage.removeItem('userRole');
+    window.location.href = 'index.html';
+  }
+}
+
+// ================== ROLE MANAGEMENT ==================
+function checkRoleAccess() {
+  const role = sessionStorage.getItem('userRole') || 'regular_admin';
+  const sidebarMenu = document.querySelector('.sidebar-menu');
+  if (!sidebarMenu) return;
+
+  // Header User Info
+  const userTitle = document.querySelector('.user-wrapper h4');
+  const userRole = document.querySelector('.user-wrapper small');
+
+  if (role === 'super_admin') {
+    // SUPER ADMIN: Dashboard + Settings ONLY
+    if (userTitle) userTitle.innerText = "Super Admin";
+    if (userRole) userRole.innerText = "System Administrator";
+
+    // Hide Operational Pages
+    Array.from(sidebarMenu.children).forEach(li => {
+      const link = li.querySelector('a');
+      const href = link.getAttribute('href');
+      // Naive check: if href contains restricted keywords
+      if (href.includes('payments') || href.includes('tenants') || href.includes('expenses') || href.includes('reports')) {
+        li.style.display = 'none';
+      }
+    });
+
+  } else {
+    // REGULAR ADMIN: Everything EXCEPT Settings
+    if (userTitle) userTitle.innerText = "Building Manager";
+    if (userRole) userRole.innerText = "Admin User";
+
+    Array.from(sidebarMenu.children).forEach(li => {
+      const link = li.querySelector('a');
+      const href = link.getAttribute('href');
+      if (href.includes('settings')) {
+        li.style.display = 'none';
+      }
+    });
+
+    // Security: Redirect if Regular Admin tries to access Settings page
+    if (window.currentPage === 'settings') {
+      alert("Access Denied: Super Admin only.");
+      window.location.href = '../dashboard.html';
+    }
+  }
+}
+
+// ================== RESET DATA LOGIC ==================
+async function resetAllData() {
+  if (!confirm("⚠️ DANGER: This will delete ALL Dummy Data (Tenants, Flats, Expenses etc) from the system to allow real entry.\n\nAre you sure?")) return;
+
+  // Double confirmation
+  const userConfirm = prompt("Type 'DELETE' to confirm permanent deletion:");
+  if (userConfirm !== 'DELETE') {
+    alert("Action Cancelled.");
+    return;
+  }
+
+  showLoader(true);
+  try {
+    const params = new URLSearchParams({ action: 'resetData' });
+    const res = await fetch(`${SCRIPT_URL}?${params.toString()}`);
+    const data = await res.json();
+
+    if (data.result === 'error') throw new Error(data.message);
+
+    showToast("System Reset Successful! All data cleared.", "success");
+    // Reload to clean state
+    setTimeout(() => location.reload(), 2000);
+
+  } catch (e) {
+    console.error(e);
+    // Fallback for demo if backend script isn't updated
+    showToast("Request sent. If backend supports it, data is wiped.", "warning");
+  } finally {
+    showLoader(false);
+  }
 }

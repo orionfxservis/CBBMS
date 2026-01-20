@@ -750,7 +750,7 @@ body.dark-mode .settings-header {
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
   position: relative;
-  height: 150px;
+  height: 350px;
 }
 
 .chart-container h3 {
